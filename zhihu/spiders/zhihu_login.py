@@ -2,12 +2,11 @@ __author__ = 'cliviazhou'
 # -*- coding: utf-8 -*-
 
 import os
-import requests
+import json
 
-zhihuInfo = {
 
-    'base_url': 'http://www.zhihu.com',
-    'login_url': 'http://www.zhihu.com/login',
-    'question_base_url': 'http://www.zhihu.com/question/',
-
-}
+def config():
+    with open(os.getcwd() + "/zhihu/spiders/config.json", 'r') as f:
+        config = json.load(f)
+        f.close()
+        return config

@@ -12,3 +12,12 @@ class ZhihuItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
+
+
+class UserAnswersItem(scrapy.Item):
+    question_link = scrapy.Field()
+    question_id = scrapy.Field()
+    answer_id = scrapy.Field()
+    question_title = scrapy.Field()
+    answer_content = scrapy.Field()
+    answer_upvote = scrapy.Field()
