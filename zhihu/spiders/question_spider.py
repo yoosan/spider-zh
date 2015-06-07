@@ -4,24 +4,32 @@ __author__ = 'cliviazhou'
 import scrapy
 import os
 import json
-import zhihu_login
 from scrapy.http import Request
-from zhihu_login import config
+from selenium import webdriver
 
 
 class QuestionSpider(scrapy.Spider):
 
+    def __init__(self):
+        self.driver = webdriver.Safari()
     name = "question"
-    allowed_domains = [config()['zhihuinfo']['base_url']]
 
     question_id = 30319131
-    question_url = config()['zhihuinfo']['question_base_url'] + str(question_id)
 
-    start_urls = [question_url]
-    cookies = config()['cookies']
+    question_url = "http://www.zhihu.com/question/" + str(question_id)
+
+    cookie = {}
+
+    with open(os.getcwd() + "/zhihu/spiders/cookie.json") as f:
+        cookie = json.load(f)
+        print cookie
 
     def start_requests(self):
-        yield Request(self.question_url, cookies=self.cookies, callback=self.parse_question)
+        self.driver.get(self.question_url)
+        n = self.driver.find_element_by_class_name("zu-button-more")
+        yield Request(self.question_url, cookies=self.cookie, callback=self.parse_question)
+        n.click()
+        self.driver.close()
 
     def parse_question(self, response):
         with open('result.html', 'wb') as f:

@@ -1,46 +1,50 @@
 __author__ = 'cliviazhou'
 # -*- coding: utf-8 -*-
 
-import scrapy
+import os
+import json
 from pyquery import PyQuery as pq
-from zhihu_login import config
+from scrapy.spider import Spider
 from scrapy.http import Request
 from zhihu.items import UserAnswersItem
+from utility import read_users
 
 
-class UserSpider(scrapy.Spider):
+class UserSpider(Spider):
+
     name = "user"
+    username = read_users()[0]
 
-    username = "kaifulee"
-    user_url = config()['zhihuinfo']['user_url'] + username
+    base_url = "http://www.zhihu.com/"
+    login_url = base_url + "login"
+
+    user_url = base_url + "people/" + username
 
     start_urls = [user_url]
-    cookies = config()['cookies']
+    cookie = {}
 
-    i = 1
+    with open(os.getcwd() + "/zhihu/spiders/cookie.json") as f:
+        cookie = json.load(f)
+        print cookie
 
     def start_requests(self):
-        yield Request(self.user_url, cookies=self.cookies, callback=self.parse_user)
+        yield Request(self.user_url, cookies=self.cookie, callback=self.parse_user)
 
     def parse_user(self, response):
         with open(self.username + '.html', 'wb') as f:
             f.write(response.body)
             f.close()
-        yield Request(self.user_url + "/answers", cookies=self.cookies, callback=self.parse_user_answers)
+        yield Request(self.user_url + "/answers", cookies=self.cookie, callback=self.parse_user_answers)
 
     def parse_user_answers(self, response):
         html = response.body
-        with open(self.username + '_answer_' + str(self.i) + '_.html', 'wb') as f:
+        pq_body = pq(html)
+        page = pq_body(".border-pager span:last a").attr('href')
+        with open(self.username + '_answer_' + str(page) + '_.html', 'wb') as f:
             print "success"
             f.write(html)
             f.close()
-
-        self.i += 1
-        pq_body = pq(html)
-        page = pq_body(".border-pager span:last a").attr('href')
-        page_request = Request(self.user_url + "/answers" + str(page),
-                               cookies=self.cookies,
-                               callback=self.parse_user_answers)
+        page_request = Request(self.user_url + "/answers" + str(page), callback=self.parse_user_answers)
 
         pq_answers = pq_body(".zm-item")
         print pq_answers.__class__, len(pq_answers)
@@ -56,5 +60,4 @@ class UserSpider(scrapy.Spider):
             items['answer_content'] = content
             items['answer_upvote'] = upvote
             print link, upvote
-            #yield items
         yield page_request
