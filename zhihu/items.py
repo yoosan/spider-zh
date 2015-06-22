@@ -15,9 +15,17 @@ class ZhihuItem(scrapy.Item):
 
 
 class UserAnswersItem(scrapy.Item):
-    question_link = scrapy.Field()
+    user = scrapy.Field()
     question_id = scrapy.Field()
     answer_id = scrapy.Field()
-    question_title = scrapy.Field()
-    answer_content = scrapy.Field()
-    answer_upvote = scrapy.Field()
+    url = scrapy.Field()
+    title = scrapy.Field()
+
+
+class AnswerDetailItem(scrapy.Item):
+    question_id = scrapy.Field()
+    answer_id = scrapy.Field()
+    upvote = scrapy.Field()
+    date = scrapy.Field()
+    url = scrapy.Field()
+    content = scrapy.Field()

@@ -3,11 +3,16 @@ __author__ = 'cliviazhou'
 
 import os
 import json
-from scrapy.http import Response
+
 
 def config():
-    with open(os.getcwd() + "/zhihu/spiders/config.json", 'r') as f:
+    """
+
+    :rtype : dict
+    """
+    with open(os.getcwd() + "/cookie.json", 'r') as f:
         config_info = json.load(f)
+        print config_info
         f.close()
         return config_info
 
@@ -15,9 +20,20 @@ def config():
 def read_users():
     with open(os.getcwd() + "/zhihu/spiders/Users_List.txt") as f:
         users_list = f.readlines()
+        result_list = []
         if users_list.__len__() == 0:
             print "The users_List file is empty."
             f.close()
         else:
+            for user in users_list:
+                if user == "":
+                    continue
+                else:
+                    user = user.strip("\n")
+                    result_list.append(user)
             f.close()
-            return users_list
+            return result_list
+
+
+if __name__ == "__main__":
+    config()
