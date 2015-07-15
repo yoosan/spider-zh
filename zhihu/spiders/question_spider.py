@@ -9,6 +9,9 @@ from scrapy.http import Request
 
 class QuestionSpider(scrapy.Spider):
 
+    def parse(self, response):
+        pass
+
     name = "question"
 
     question_id = 30319131

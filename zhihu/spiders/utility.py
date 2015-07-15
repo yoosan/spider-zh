@@ -34,6 +34,11 @@ def read_users():
             f.close()
             return result_list
 
+def parseStr2Int(str):
+    if len(str) == 0:
+        return 0
+    else:
+        return int(str)
 
 if __name__ == "__main__":
     config()

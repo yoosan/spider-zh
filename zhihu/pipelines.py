@@ -5,14 +5,11 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import MySQLdb
-from items import UserAnswersItem
-from MySQLdb import cursors
-from twisted.enterprise import adbapi
-
+import spiders.user_spider
 
 class ZhihuPipeline(object):
     def __init__(self):
-        self.conn = MySQLdb.connect(user='root', passwd='', db='db_spider', charset='utf8', use_unicode=True)
+        self.conn = MySQLdb.connect(user='root', passwd='root', db='db_spider', charset='utf8', use_unicode=True)
         self.cursor = self.conn.cursor()
 
     def process_item(self, item, spider):
