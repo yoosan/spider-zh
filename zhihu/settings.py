@@ -12,7 +12,7 @@ BOT_NAME = 'zhihu'
 
 SPIDER_MODULES = ['zhihu.spiders']
 NEWSPIDER_MODULE = 'zhihu.spiders'
-# ITEM_PIPELINES = ['zhihu.pipelines.ZhihuPipeline']
+ITEM_PIPELINES = ['zhihu.pipelines.ZhihuPipeline']
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'zhihu (+http://www.yourdomain.com)'
