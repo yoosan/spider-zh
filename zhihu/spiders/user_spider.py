@@ -27,6 +27,8 @@ class UserSpider(Spider):
     COOKIE = dict(info[0])
     HEADERS = dict(info[1])
 
+    db = UserDB()
+
     def start_requests(self):
         """
         Start request from user_url
@@ -121,11 +123,10 @@ class UserSpider(Spider):
         if followees == 0 or followees == 0 or upvote == 0:
             return
 
-        userinfo = UserInfo(user, nickname, bio, upvote, thanks, followers,
+        userinfo = UserInfo(Url.PEOPLE_URL + user, nickname, bio, upvote, thanks, followers,
                             followees, views, weibo, location, business,
                             career, education, collection, share)
-        db = UserDB()
-        db.insert(userinfo)
+        self.db.insert(userinfo)
         user_url = Url.PEOPLE_URL + user
         request = Request("{0}/followees".format(user_url),
                           cookies=self.COOKIE,

@@ -77,5 +77,6 @@ def import_cookies_redis():
     print cok, hed.__class__
     return [cok, hed]
 
+
 if __name__ == "__main__":
     import_cookies_redis()
